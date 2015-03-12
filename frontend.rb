@@ -43,7 +43,7 @@ class LXCFrontend < Sinatra::Base
         if File.readlines(etc_path + "/system-release").grep(/Fedora/)
           "fedora"
         elsif File.readlines(etc_path + "/system-release").grep(/CentOS/)
-          "cent"
+          "centos"
         elsif File.readlines(etc_path + "/system-release").grep(/Red Hat/)
           "rhel"
         else
