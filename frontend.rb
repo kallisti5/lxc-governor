@@ -71,8 +71,8 @@ class LXCFrontend < Sinatra::Base
   end
 
   get "/containers/:container/config" do
-    @container = LXC.container(params[:container])
-    if @container.exists?
+    @container = LXC::Container.new(params[:container])
+    if @container.defined?
       @config_data = lxc_config_for(@container.name)
       erb :config
     else
@@ -81,8 +81,8 @@ class LXCFrontend < Sinatra::Base
   end
 
   get "/containers/:container/interfaces" do
-    @container = LXC.container(params[:container])
-    if @container.exists?
+    @container = LXC::Container.new(params[:container])
+    if @container.defined?
       @config_data = lxc_interfaces_for(@container.name)
       erb :interfaces
     else
@@ -91,8 +91,8 @@ class LXCFrontend < Sinatra::Base
   end
 
   post "/containers/:container/update_config" do
-    container = LXC.container(params[:container])
-    if container.exists? && params[:config]
+    container = LXC::Container.new(params[:container])
+    if container.defined? && params[:config]
       update_lxc_config_for(container.name, params[:config])
       container.restart
 
@@ -102,8 +102,8 @@ class LXCFrontend < Sinatra::Base
   end
 
   post "/containers/:container/update_interfaces" do
-    container = LXC.container(params[:container])
-    if container.exists? && params[:interfaces]
+    container = LXC::Container.new(params[:container])
+    if container.defined? && params[:interfaces]
       update_lxc_interfaces_for(container.name, params[:interfaces])
       container.restart
 
@@ -113,8 +113,8 @@ class LXCFrontend < Sinatra::Base
   end
 
   get "/containers/:container/stop" do
-   container = LXC.container(params[:container])
-   if container.exists? && container.running?
+   container = LXC::Container.new(params[:container])
+   if container.defined? && container.running?
      container.stop
      flash[:notice] = "You have successfully stopped #{container.name}."
      sleep 0.5 # waiting when it will be stopped
@@ -123,8 +123,8 @@ class LXCFrontend < Sinatra::Base
   end
 
   get "/containers/:container/start" do
-   container = LXC.container(params[:container])
-   if container.exists?
+   container = LXC::Container.new(params[:container])
+   if container.defined?
      container.start
      flash[:notice] = "You have successfully started #{container.name}."
      sleep 0.5 # waiting when it will be started
@@ -133,8 +133,8 @@ class LXCFrontend < Sinatra::Base
   end
 
   get "/containers/:container/secure_destroy" do
-    @container = LXC.container(params[:container])
-    if @container.exists?
+    @container = LXC::Container.new(params[:container])
+    if @container.defined?
       session[:secure_destroy_key] = generate_confirm_code
       erb :secure_destroy
     else
@@ -143,8 +143,8 @@ class LXCFrontend < Sinatra::Base
   end
 
   post "/containers/:container/destroy" do
-    container = LXC.container(params[:container])
-    if container.exists? && session[:secure_destroy_key] == params[:secure_destroy_key]
+    container = LXC::Container.new(params[:container])
+    if container.defined? && session[:secure_destroy_key] == params[:secure_destroy_key]
      container.destroy
      flash[:notice] = "You have successfully destroyed #{container.name}."
      sleep 0.5 # waiting when it will be started

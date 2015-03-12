@@ -10,16 +10,20 @@
     <tr>
       <td><%= c.name %></td>
       <td><a href="http://<%= lxc_ip_for(c.name) %>" target="_blank"><%= lxc_ip_for(c.name) %></a></td>
-      <td><%= c.state.capitalize %></td>
+      <td><%= c.state.capitalize %>, PID: <%= c.init_pid %></td>
       <td>
         <% if c.running? %>
-          <%= bytes_in_megabytes c.memory_usage %> MB
+          <%= bytes_in_megabytes c.cgroup_item('memory.usage_in_bytes').to_i %> MB
         <% else %>
           &mdash;
         <% end %>
         /
         <% if c.running? %>
-          <%= bytes_in_megabytes c.memory_limit %> MB
+          <% if c.cgroup_item('memory.limit_in_bytes').to_i >= 18446744073709551615 %>
+            &infin;
+          <% else %>
+            <%= bytes_in_megabytes c.cgroup_item('memory.limit_in_bytes').to_i %> MB
+          <% end %>
         <% else %>
           &mdash;
         <% end %>
