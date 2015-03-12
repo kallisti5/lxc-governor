@@ -62,8 +62,7 @@ class LXCFrontend < Sinatra::Base
   end
 
   get "/" do
-    LXC.use_sudo = true
-    @containers = LXC.containers
+    @containers = LXC.list_containers()
     erb :index
   end
 
