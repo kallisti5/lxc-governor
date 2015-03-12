@@ -1,5 +1,6 @@
 <table class="table table-condensed">
   <tr>
+    <th></th>
     <th>Name</th>
     <th>IP</th>
     <th>State</th>
@@ -8,6 +9,7 @@
   </tr>
   <% @containers.each do |c| %>
     <tr>
+      <td style="width: 24px;"><img src="/images/<%= lxc_get_os(c.name) %>.png"></td>
       <td><%= c.name %></td>
       <td><a href="http://<%= lxc_ip_for(c.name) %>" target="_blank"><%= lxc_ip_for(c.name) %></a></td>
       <td><%= c.state.capitalize %><% if c.running? %>, PID: <%= c.init_pid %><% end %></td>

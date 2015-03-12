@@ -36,6 +36,24 @@ class LXCFrontend < Sinatra::Base
       File.join(LXC_VM_PATH, name.to_s, "config")
     end
 
+    def lxc_get_os(name)
+      etc_path = File.join(LXC_VM_PATH, name.to_s, "rootfs", "etc")
+
+      if File.exist?(etc_path + "/system-release")
+        if File.readlines(etc_path + "/system-release").grep(/Fedora/)
+          "fedora"
+        elsif File.readlines(etc_path + "/system-release").grep(/CentOS/)
+          "cent"
+        elsif File.readlines(etc_path + "/system-release").grep(/Red Hat/)
+          "rhel"
+        else
+          "unknown"
+        end
+      else
+        "unknown"
+      end
+    end
+
     def lxc_interfaces_path_for(name)
       File.join(LXC_VM_PATH, name.to_s, "rootfs", "etc", "network", "interfaces")
     end
@@ -43,14 +61,6 @@ class LXCFrontend < Sinatra::Base
     def lxc_interfaces_for(name)
       config_path = lxc_interfaces_path_for(name)
       File.open(config_path).read
-    end
-
-    def update_lxc_interfaces_for(name, content)
-      config_path = lxc_interfaces_path_for(name)
-      content.gsub!("\r\n", "\n") # otherwise it will be saved in DOS-format
-      File.open(config_path, 'w') do |file|
-        file.write(content)
-      end
     end
 
     def update_lxc_config_for(name, content)
