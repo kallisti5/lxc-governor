@@ -62,7 +62,11 @@ class LXCFrontend < Sinatra::Base
   end
 
   get "/" do
-    @containers = LXC.list_containers()
+    @container_names = LXC.list_containers()
+    @containers = Array.new
+    @container_names.each do |name|
+      @containers.push(LXC::Container.new(name))
+    end
     erb :index
   end
 
