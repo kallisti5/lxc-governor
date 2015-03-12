@@ -82,16 +82,6 @@ class LXCFrontend < Sinatra::Base
     end
   end
 
-  get "/containers/:container/interfaces" do
-    @container = LXC::Container.new(params[:container])
-    if @container.defined?
-      @config_data = lxc_interfaces_for(@container.name)
-      erb :interfaces
-    else
-      halt 422
-    end
-  end
-
   post "/containers/:container/update_config" do
     container = LXC::Container.new(params[:container])
     if container.defined? && params[:config]
@@ -99,17 +89,6 @@ class LXCFrontend < Sinatra::Base
       container.restart
 
       flash[:notice] = "You have successfully saved #{container.name} config. The container was restarted."
-    end
-    redirect "/"
-  end
-
-  post "/containers/:container/update_interfaces" do
-    container = LXC::Container.new(params[:container])
-    if container.defined? && params[:interfaces]
-      update_lxc_interfaces_for(container.name, params[:interfaces])
-      container.restart
-
-      flash[:notice] = "You have successfully saved #{container.name} interfaces. The container was restarted."
     end
     redirect "/"
   end
