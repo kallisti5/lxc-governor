@@ -2,6 +2,7 @@ class LXCFrontend < Sinatra::Base
   MEGABYTE = 1024.0 * 1024.0 # to calculate available memory
   LXC_VM_PATH = "/var/lib/lxc" # default path to LXC data on Ubuntu
   LXC_IP_REGEXP = /lxc.network.ipv4 = ([\d.]+)\/([\d]+)/ # regexp to find server IP
+  HOSTNAME = `uname -n`.chomp.sub(/\n/,'')
 
   enable :sessions
   register Sinatra::Flash
@@ -67,6 +68,7 @@ class LXCFrontend < Sinatra::Base
     @container_names.each do |name|
       @containers.push(LXC::Container.new(name))
     end
+    @hostname = HOSTNAME
     erb :index
   end
 
