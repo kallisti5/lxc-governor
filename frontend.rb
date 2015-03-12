@@ -4,7 +4,7 @@ class LXCFrontend < Sinatra::Base
   LXC_IP_REGEXP = /lxc.network.ipv4 = ([\d.]+)\/([\d]+)/ # regexp to find server IP
 
   enable :sessions
-  use Rack::Flash
+  register Sinatra::Flash
 
   configure do
     set :public_folder, Proc.new { File.join(root, "static") }

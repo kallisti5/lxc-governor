@@ -1,14 +1,12 @@
 GIT
-  remote: git://github.com/sosedoff/lxc-ruby.git
-  revision: 6d82c2ae3513789b2856d07a156e9131369f95fe
+  remote: git://github.com/lxc/ruby-lxc.git
+  revision: e18dc18d8dc4c54e3d2ec3dee67502de1e8af6e1
   specs:
-    lxc-ruby (0.3.2)
-      posix-spawn (~> 0.3.6)
+    ruby-lxc (1.2.0)
 
 GEM
   remote: https://rubygems.org/
   specs:
-    posix-spawn (0.3.10)
     rack (1.6.0)
     rack-protection (1.5.3)
       rack
@@ -24,6 +22,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  lxc-ruby!
+  ruby-lxc!
   sinatra
   sinatra-flash
