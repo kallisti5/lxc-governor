@@ -40,15 +40,17 @@ class LXCFrontend < Sinatra::Base
       etc_path = File.join(LXC_VM_PATH, name.to_s, "rootfs", "etc")
 
       if File.exist?(etc_path + "/system-release")
-        if File.readlines(etc_path + "/system-release").grep(/Fedora/)
+        if File.readlines(etc_path + "/system-release").grep(/Fedora/).size > 0
           "fedora"
-        elsif File.readlines(etc_path + "/system-release").grep(/CentOS/)
+        elsif File.readlines(etc_path + "/system-release").grep(/CentOS/).size > 0
           "centos"
-        elsif File.readlines(etc_path + "/system-release").grep(/Red Hat/)
+        elsif File.readlines(etc_path + "/system-release").grep(/Red Hat/).size > 0
           "rhel"
         else
           "unknown"
         end
+      elsif File.exist?(etc_path + "/debian_version")
+        "debian"
       else
         "unknown"
       end
